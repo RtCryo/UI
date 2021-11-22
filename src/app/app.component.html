@@ -1,0 +1,5 @@
+<div>
+  <app-navbar></app-navbar>
+  <app-login (onChanged)="onChanged($event)" *ngIf='invalidLogin'></app-login>
+  <router-outlet *ngIf='loginSuccess'></router-outlet>
+</div>
