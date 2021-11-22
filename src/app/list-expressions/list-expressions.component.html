@@ -1,7 +1,17 @@
-
-<div id = "expressionList" class = "p-3">
+<!-- <div id = "expressionList" class = "p-3">
     <label for = "chkBoxSelectAll">
         <input id = "chkBoxSelectAll" class="chkBoxSelectAll me-1" type="checkbox" value="0">
     </label>
     <button class = "buttonDel">DELETE</button>
+</div> -->
+
+<div class="card mt-4">
+    <h4 class="card-header">You're logged in with Angular 10 & JWT!!</h4>
+    <div class="card-body">
+        <h6>Users from secure api end point</h6>
+        <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
+        <ul *ngIf="users">
+            <li *ngFor="let user of users">{{user.id}} {{user.username}} {{user.autorites}}</li>
+        </ul>
+    </div>
 </div>

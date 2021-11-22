@@ -1,27 +1,22 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
+import { AuthenticationService } from './_services/authentication.service';
+import { User } from './_models/user';
 
+@Component({ selector: 'app', templateUrl: 'app.component.html' })
 export class AppComponent {
-  title = 'UI';
-  invalidLogin: boolean = true;
-  loginSuccess: boolean = false;
+    currentUser!: User;
 
-  constructor(){
-  }
-
-  onChanged(login: boolean) {
-    if (login) {
-      this.invalidLogin = false;
-      this.loginSuccess = true;
-    } else {
-      this.invalidLogin = true;
-      this.loginSuccess = false;
+    constructor(
+        private router: Router,
+        private authenticationService: AuthenticationService
+    ) {
+        this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
     }
-  }
 
+    logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
+    }
 }

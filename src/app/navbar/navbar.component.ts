@@ -7,11 +7,10 @@ import { Input, Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-  username = "";
   imgLink: string = "/assets/img/logo.png";
+  userName: string = "Anon";
 
   constructor() {
-    
   }
 
   ngOnInit(): void {
