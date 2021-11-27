@@ -46,16 +46,6 @@ export class CalcComponent implements OnInit {
     });
   }
 
-/*   submitEnter(){
-    this.loading = true;
-    this.calcService.saveExpression().subscribe(expression => {
-      this.loading = false;
-      this.expression = expression;
-    }, error => {
-      alert(error.message);
-    });
-  } */
-
   submitEnter(){
     this.loading = true;
     this.calcService.saveExpression().subscribe({

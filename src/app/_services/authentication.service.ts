@@ -30,7 +30,7 @@ export class AuthenticationService {
             }));
     } */
 
-    login(username: string, password: string){
+    /* login(username: string, password: string){
         return this.http.get<User>(environment.hostUrl + '/login', 
         { headers: { authorization: this.createBasicAuthToken(username, password)}, withCredentials: true}
         ).pipe(map(user => {
@@ -38,6 +38,11 @@ export class AuthenticationService {
             this.currentUserSubject.next(user);
             return user;
         }))
+    } */
+
+    login(username: string, password: string){
+        return this.http.get<User>(environment.hostUrl + '/login', 
+        { headers: { authorization: this.createBasicAuthToken(username, password)}, withCredentials: true})
     }
 
     createBasicAuthToken(username: string, password: string) {
@@ -45,7 +50,6 @@ export class AuthenticationService {
     }
 
     logout() {
-        // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null!);
     }
