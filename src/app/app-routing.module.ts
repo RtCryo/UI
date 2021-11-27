@@ -7,11 +7,13 @@ import { UsersComponent } from './users/users.component';
 import { AuthGuard } from './_helpers/auth.guard';
 
 const appRoutes: Routes = [
+  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+  { path: 'calc', component: CalcComponent, canActivate: [AuthGuard] },
+  { path: 'admin', component: ListExpressionsComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'calc', component: CalcComponent, canActivate: [AuthGuard]},
-  { path: 'admin', component: ListExpressionsComponent, canActivate: [AuthGuard]},
-  { path: 'users', component: UsersComponent, canActivate: [AuthGuard]},
-  { path: '**', redirectTo: 'users' },
+
+  // otherwise redirect to home
+  { path: '**', redirectTo: 'calc' }
 ]
 
 @NgModule({

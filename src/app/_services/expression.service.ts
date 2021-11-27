@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
-import { User } from '../_models/user';
+import { ExpressionDTO } from '../_models/expressionDTO';
 
 @Injectable({ providedIn: 'root' })
-export class UserService {
+export class ExpressionService {
     constructor(private http: HttpClient) { }
 
     getAll() {
-        return this.http.get<User[]>(`${environment.hostUrl}/users`, {withCredentials: true});
+        return this.http.get<ExpressionDTO[]>(`${environment.hostUrl}/admin`, {withCredentials: true});
     }
 }

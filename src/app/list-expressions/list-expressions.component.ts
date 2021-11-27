@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
-
-import { User } from '../_models/user';
-import { UserService } from '../_services/user.service';
+import { ExpressionService } from '../_services/expression.service';
+import { ExpressionDTO } from '../_models/expressionDTO';
 
 @Component({
   selector: 'app-list-expressions',
@@ -10,18 +8,18 @@ import { UserService } from '../_services/user.service';
   styleUrls: ['./list-expressions.component.css']
 })
 export class ListExpressionsComponent implements OnInit {
-
+  
   loading = false;
-  users!: User[];
+  expressions!: ExpressionDTO[];
 
-  constructor(private userService: UserService) { }
+  constructor(private expressionService: ExpressionService) { }
 
   ngOnInit() {
-      this.loading = true;
-      this.userService.getAll().pipe(first()).subscribe(users => {
-          this.loading = false;
-          this.users = users;
-      });
+    this.loading = true;
+    this.expressionService.getAll().subscribe(expressions => {
+        this.loading = false;
+        this.expressions = expressions;
+    });
   }
 
 }

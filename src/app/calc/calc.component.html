@@ -1,29 +1,29 @@
-<div class = "calc">
+<div class = "calc" *ngIf="expression">
     <div class = "containerScore">
-         <div class = "item score small"></div>
-         <div class = "item score big" id = "result">0</div>
+         <div class = "item score small">{{expression.expressionList}}</div>
+         <div class = "item score big">{{expression.result}}</div>
     </div>
     <div class = "containerBase">
         <div class = "containerButtRaw">
-            <button class = "item op">/</button>
-            <button class = "item op">*</button>
-            <button class = "item op">-</button>
-            <button class = "item num">7</button>
-            <button class = "item num">8</button>
-            <button class = "item num">9</button>
-            <button class = "item num">4</button>
-            <button class = "item num">5</button>
-            <button class = "item num">6</button>
-            <button class = "item num">1</button>
-            <button class = "item num">2</button>
-            <button class = "item num">3</button>
-            <button class = "item doubleButtRaw comma">,</button>
-            <button class = "item num">0</button>
+            <button class = "item op" (click)="submitOp('/')">/</button>
+            <button class = "item op" (click)="submitOp('*')">*</button>
+            <button class = "item op" (click)="submitOp('-')">-</button>
+            <button class = "item num" (click)="submitNum('7')">7</button>
+            <button class = "item num" (click)="submitNum('8')">8</button>
+            <button class = "item num" (click)="submitNum('9')">9</button>
+            <button class = "item num" (click)="submitNum('4')">4</button>
+            <button class = "item num" (click)="submitNum('5')">5</button>
+            <button class = "item num" (click)="submitNum('6')">6</button>
+            <button class = "item num" (click)="submitNum('1')">1</button>
+            <button class = "item num" (click)="submitNum('2')">2</button>
+            <button class = "item num" (click)="submitNum('3')">3</button>
+            <button class = "item doubleButtRaw comma" (click)="submitComma()">,</button>
+            <button class = "item num" (click)="submitNum('0')">0</button>
         </div>
         <div class = containerButtCol>
-            <button class = "item cancel">C</button>
-            <button class = "item doubleButtCol op">+</button>
-            <button class = "item doubleButtCol enter">E</button>
+            <button class = "item cancel" (click)="submitCancel()">C</button>
+            <button class = "item doubleButtCol op" (click)="submitOp('+')">+</button>
+            <button class = "item doubleButtCol enter" (click)="submitEnter()">E</button>
         </div>
      </div>
 </div>
