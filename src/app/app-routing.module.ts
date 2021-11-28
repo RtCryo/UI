@@ -11,8 +11,6 @@ const appRoutes: Routes = [
   { path: 'calc', component: CalcComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: ListExpressionsComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
-
-  // otherwise redirect to home
   { path: '**', redirectTo: 'calc' }
 ]
 

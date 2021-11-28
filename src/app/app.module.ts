@@ -29,7 +29,7 @@ import { ErrorInterceptor } from './_helpers/error.interceptor';
     HttpClientModule
   ],
   providers: [
-    /* { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, */
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     CookieService,
   ],
   bootstrap: [AppComponent]
