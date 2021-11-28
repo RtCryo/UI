@@ -9,24 +9,13 @@ import { Observable } from 'rxjs';
 export class CalcService {
     constructor(private http: HttpClient) { }
 
-    setNum(num: String): Observable<ExpressionDTO>{
-        return this.http.post<ExpressionDTO>(`${environment.hostUrl}/calc/expression/submitNum`, num, {withCredentials: true});
+
+    calculateExpression(expression: ExpressionDTO): Observable<any>{
+        return this.http.post<any>(`${environment.hostUrl}/calc/expression/calculate`, expression, {withCredentials: true});
     }
 
-    setOP(op: String): Observable<ExpressionDTO>{
-        return this.http.post<ExpressionDTO>(`${environment.hostUrl}/calc/expression/submitOperation`, op, {withCredentials: true});
-    }
-
-    saveExpression(): Observable<ExpressionDTO>{
-        return this.http.get<ExpressionDTO>(`${environment.hostUrl}/calc/expression/saveExpression`, {withCredentials: true});
-    }
-
-    cancelExpression(): Observable<ExpressionDTO>{
-        return this.http.get<ExpressionDTO>(`${environment.hostUrl}/calc/expression/cancelExpression`, {withCredentials: true});
-    }
-
-    setComma(): Observable<ExpressionDTO>{
-        return this.http.get<ExpressionDTO>(`${environment.hostUrl}/calc/expression/submitComma`, {withCredentials: true});
+    saveExpression(expression: ExpressionDTO): Observable<ExpressionDTO>{
+        return this.http.put<ExpressionDTO>(`${environment.hostUrl}/calc/expression/add`, expression, {withCredentials: true});
     }
     
 }
