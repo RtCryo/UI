@@ -6,9 +6,8 @@
         </label>
         <button class = "buttonDel">DELETE</button>
         <h6>Expressions:</h6>
-        <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
-        <ul *ngIf="expressions">
-            <li *ngFor="let expression of expressions"><b>{{expression.date}}:</b> {{expression.expressionList}}</li>
+        <ul>
+            <li *ngFor="let expression of webSocket.expressions"><b>{{expression.date}}:</b> {{expression.expressionList}}</li>
         </ul>
     </div>
 </div>
