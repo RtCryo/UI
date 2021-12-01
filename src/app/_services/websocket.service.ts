@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import { ExpressionDTO } from '../_models/expressionDTO';
@@ -14,9 +14,23 @@ export class WebsocketService {
   private stompClient!: Stomp.Client;
 
   constructor(private http: HttpClient) {
-      this.getAll().subscribe(expressions => {
-        this.expressions = expressions;
+    this.refreshList();
+    this.connect();
+  }
+
+  setExpression(expression: ExpressionDTO){
+    this.expressions.push(expression);
+  }
+
+  refreshList(){
+    this.getAll().subscribe(expressions => {
+      this.expressions = expressions;
     });
+  }
+
+  deleteExpression(expression: ExpressionDTO) {
+    let index = this.expressions.indexOf(expression);
+    delete this.expressions[index];
   }
 
   connect() {
@@ -25,11 +39,20 @@ export class WebsocketService {
       this.stompClient = Stomp.over(socket);
     }
     const _this = this;
-    this.stompClient.connect({}, function (frame: any) {
-      console.log('Connected: ' + frame);
-      _this.stompClient.subscribe('/topic/public', function () {
-
-        
+    this.stompClient.connect({}, function () {
+      _this.stompClient.subscribe('/topic/public', (msg) => {
+          if(msg.body){
+            let expressionMessage = JSON.parse(msg.body);
+            if(expressionMessage.type === "ADD") {
+              _this.setExpression(expressionMessage.expression);
+            }
+            if(expressionMessage.type === "REFRESH") {
+              _this.refreshList();
+            }
+            if(expressionMessage.type === "DELETE") {
+              _this.refreshList();
+            }
+          }
       });
     });
   }

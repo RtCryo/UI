@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 import { ExpressionDTO } from '../_models/expressionDTO';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ExpressionService {
@@ -10,5 +11,9 @@ export class ExpressionService {
 
     getAll() {
         return this.http.get<ExpressionDTO[]>(`${environment.hostUrl}/admin`, {withCredentials: true});
+    }
+
+    sendToDelete(arr: ExpressionDTO[]): Observable<any> {
+        return this.http.post<ExpressionDTO[]>(`${environment.hostUrl}/admin/delete`, arr, {withCredentials: true} );
     }
 }

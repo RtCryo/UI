@@ -16,6 +16,7 @@ export class CalcComponent implements OnInit {
   isNextNum: boolean = true;
   isNextOperation: boolean = false;
   lastButton: string = "";
+  longExpression: boolean = false;
 
   constructor(private calcService: CalcService) {}
 
@@ -28,7 +29,6 @@ export class CalcComponent implements OnInit {
     if (this.isNextOperation) {
       if(this.isFirstVal){
         if(!this.isSave){
-          this.expression.secondValue
           this.calcService.calculateExpression(this.expression).subscribe({
             next: (num) => {
               this.loading = false;
@@ -40,6 +40,7 @@ export class CalcComponent implements OnInit {
               this.expression.operation = op;
               this.isNextOperation = false;
               this.lastButton = "op";
+              this.longExpression = true;
             },
             error: (msg) => { 
               alert(msg.error) 
@@ -100,6 +101,7 @@ export class CalcComponent implements OnInit {
     this.isNextNum = true;
     this.isNextOperation = false;
     this.lastButton = "";
+    this.longExpression = false;
     this.expression = new ExpressionDTO();
   }
 
@@ -109,13 +111,19 @@ export class CalcComponent implements OnInit {
         this.loading = false;
         this.expression.result = num.toString().replace(".",",");
         if(this.lastButton === "enter") {
-          this.expression.expressionList += " " + this.expression.secondValue + " = " + this.expression.result;
+          if(!this.longExpression) {
+            this.expression.expressionList = this.expression.firstValue + " " + 
+            this.expression.operation + " " + this.expression.secondValue + " = ";
+          } else {
+            this.expression.expressionList += this.expression.secondValue + " = " 
+          }
           this.calcService.saveExpression(this.expression).subscribe({
             next: (expression) => {
               this.loading = false;
               this.expression = expression;
               this.expression.firstValue = this.expression.result;
               this.isSave = true;
+              this.longExpression = false;
             },
             error: (msg) => {
               alert(msg.error)
@@ -133,8 +141,11 @@ export class CalcComponent implements OnInit {
 
   submitEnter(){
     this.loading = true;
-    if (this.lastButton = "op") {
+    if (this.lastButton === "op") {
       this.expression.secondValue = this.expression.result;
+    }
+    if (this.lastButton === "enter") {
+      this.expression.firstValue = this.expression.result;
     }
     this.lastButton = "enter";
     this.calculate();

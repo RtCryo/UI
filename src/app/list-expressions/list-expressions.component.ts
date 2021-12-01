@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ExpressionService } from '../_services/expression.service';
 import { ExpressionDTO } from '../_models/expressionDTO';
+import { ExpressionService } from '../_services/expression.service';
 import { WebsocketService } from '../_services/websocket.service';
 
 @Component({
@@ -10,16 +10,59 @@ import { WebsocketService } from '../_services/websocket.service';
 })
 export class ListExpressionsComponent implements OnInit {
   
-  constructor(public webSocket: WebsocketService) {
-    
+  checked = false;
+
+  constructor(public webSocket: WebsocketService, private expressionService: ExpressionService) {
+
   }
 
   ngOnInit() {
 
-    /* this.expressionService.getAll().subscribe(expressions => {
-        this.loading = false;
-        this.expressions = expressions;
-    }); */
   }
 
+  CheckAllOptions() {
+    let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll(".chkBox");
+    checkboxes.forEach((e) => {
+      if(!this.checked) { 
+        e.checked = true;
+      }
+      else {
+        e.checked = false;
+      }
+    })
+  }
+
+  resetCheckAll(){
+    let masterCheckBox = document.querySelector(".masterChkBox") as HTMLInputElement;
+    masterCheckBox.checked = false;
+    this.checked = false;
+  }
+
+  deleteExpressions(){
+    let checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll(".chkBox");
+    let listToDelete: ExpressionDTO[] = [];
+    checkboxes.forEach((e) => {
+      if(e.checked) { 
+        let id: number = +e.getAttribute("id")!;
+        this.webSocket.expressions.forEach((expression) => {
+          if(expression.id === id) {
+            let _expression = Object.assign({}, expression);
+            _expression.date = "";
+            listToDelete.push(_expression);
+            return;
+          }
+        })
+      }
+    })
+    if(listToDelete.length > 0) {
+      this.expressionService.sendToDelete(listToDelete).subscribe({
+        next: () => {
+          this.resetCheckAll();
+        },
+        error: (msg) => {
+          console.log(msg);
+        }
+      });
+    }
+  }
 }
