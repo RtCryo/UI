@@ -15,28 +15,32 @@
                     </ul>
                 </div>
                 <div class="col">
-                    <form>
+                    <form [formGroup]="userForm" novalidate>
                         <h4>Create user:</h4>
-                        <div class="mb-3">
+                        <div class="mb-3 form-group">
                           <label for="usernameInput" class="form-label">Username</label>
-                          <input type="username" class="form-control" id="usernameInput" aria-describedby="emailHelp">
+                          <input type="username" class="form-control" id="usernameInput" aria-describedby="emailHelp" formControlName="userName">
+                          <div class="text-danger col-4 mx-auto"
+                            *ngIf="userForm.controls['userName'].invalid && userForm.controls['userName'].touched">Username is incorrect!</div>
                         </div>
-                        <div class="mb-3">
+                        <div class="mb-3 form-group">
                           <label for="passwordInput" class="form-label">Password</label>
-                          <input type="password" class="form-control" id="passwordInput">
+                          <input type="password" class="form-control" id="passwordInput" formControlName="userPassword">
+                          <div class="text-danger col-4 mx-auto"
+                            *ngIf="userForm.controls['userPassword'].invalid && userForm.controls['userPassword'].touched">Password is incorrect!</div>
                         </div>
-                      </form>
-                    <div class="input-group mb-3">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Role</button>
-                        <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="#">User</a></li>
-                          <li><a class="dropdown-item" href="#">Developer</a></li>
-                          <li><a class="dropdown-item" href="#">Admin</a></li>
-                          <li><a class="dropdown-item" href="#">Super admin</a></li>
-                        </ul>
-                      </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                        <div class="input-group mb-3 form-group">
+                          <label class="input-group-text px-4" for="inputGroupSelect01">Role</label>
+                          <select class="form-select" id="inputGroupSelect01" formControlName="userRole">
+                            <option *ngFor="let role of roles" [ngValue]="role.value">{{role.value}}</option>
+                          </select>
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto mt-4 form-group">
+                          <button class="btn btn-primary" type="button" [disabled]="userForm.invalid" (click) = "onSubmit()">Create</button>
+                        </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
