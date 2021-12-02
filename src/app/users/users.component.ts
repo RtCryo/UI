@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Observable } from 'rxjs';
 import { Role } from '../_models/role';
 import { User } from '../_models/user';
 import { UserService } from '../_services/user.service';
@@ -13,22 +14,11 @@ export class UsersComponent implements OnInit {
 
   loading = false;
   users!: User[];
-  userForm: FormGroup;
+  userForm!: FormGroup;
   roles = Role;
+  resultMsg = "";
 
-  constructor(private userService: UserService) {
-    this.userForm = new FormGroup({
-      userName: new FormControl('', [Validators.required, 
-        Validators.pattern(
-        '[A-Za-z0-9]*'
-      ), Validators.minLength(2), Validators.maxLength(11)]),
-      userPassword: new FormControl('', [Validators.required, 
-        Validators.pattern(
-        '[A-Za-z0-9]*'
-      ), Validators.minLength(3), Validators.maxLength(8)],),
-      userRole: new FormControl(),
-    })
-   }
+  constructor(private userService: UserService, private formBuilder: FormBuilder) {}
 
   ngOnInit() {
       this.loading = true;
@@ -36,15 +26,43 @@ export class UsersComponent implements OnInit {
           this.loading = false;
           this.users = users;
       });
+      this.userForm = this.formBuilder.group ({
+        username: ['', [Validators.required, 
+          Validators.pattern(
+          '[A-Za-z0-9]*'
+        ), Validators.minLength(2), Validators.maxLength(11)]],
+        password: ['', [Validators.required, 
+          Validators.pattern(
+          '[A-Za-z0-9]*'
+        ), Validators.minLength(3), Validators.maxLength(8)]],
+        role: ['', Validators.required]
+      })
+      this.setDefaults();
   }
 
   onSubmit(){
-    console.log(this.userForm);
+    this.loading = true;
+    this.userService.postNewUser(this.userForm.value).subscribe({
+      next: (msg) => {
+        this.resultMsg = msg;
+        setInterval(() => {this.resultMsg = "";}, 5000);
+        this.loading = false;
+      },
+      error: (msg) => {
+        this.resultMsg = "Error";
+        setInterval(() => {this.resultMsg = "";}, 5000);
+        this.loading = false;
+      }
+    });
   }
 
   getRoles(): Array<string>{
     let roles = Object.keys(this.roles);
-    return roles;
+    return roles.slice(roles.length / 2);
+  }
+
+  setDefaults() {
+    this.userForm.get("role")!.patchValue(this.getRoles()[0]);
   }
 
 }

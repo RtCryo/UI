@@ -11,4 +11,8 @@ export class UserService {
     getAll() {
         return this.http.get<User[]>(`${environment.hostUrl}/users`, {withCredentials: true});
     }
+
+    postNewUser(user: User) {
+        return this.http.post<string>(`${environment.hostUrl}/users/create`, user, {withCredentials: true});
+    }
 }
