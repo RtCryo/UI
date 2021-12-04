@@ -46,9 +46,7 @@ export class ListExpressionsComponent implements OnInit {
         let id: number = +e.getAttribute("id")!;
         this.webSocket.expressions.forEach((expression) => {
           if(expression.id === id) {
-            let _expression = Object.assign({}, expression);
-            _expression.date = "";
-            listToDelete.push(_expression);
+            listToDelete.push(expression);
             return;
           }
         })
@@ -60,7 +58,7 @@ export class ListExpressionsComponent implements OnInit {
           this.resetCheckAll();
         },
         error: (msg) => {
-          console.log(msg);
+          alert(msg);
         }
       });
     }

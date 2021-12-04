@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Role } from '../_models/role';
 import { User } from '../_models/user';
 import { AuthenticationService } from '../_services/authentication.service';
 
@@ -27,6 +28,14 @@ export class NavbarComponent implements OnInit {
   logout() {
     this.authenticationService.logout();
     this.router.navigate(['/login']);
-}
+  }
+
+  isAdmin(){
+    return this.currentUser && ([Role.Admin, Role.Super_admin].indexOf(this.currentUser.role) > -1)
+  }
+
+  isDeveloper(){
+    return this.currentUser && ([Role.Developer, Role.Admin, Role.Super_admin].indexOf(this.currentUser.role) > -1)
+  }
 
 }

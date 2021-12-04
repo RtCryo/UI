@@ -13,7 +13,7 @@ export class ExpressionService {
         return this.http.get<ExpressionDTO[]>(`${environment.hostUrl}/admin`, {withCredentials: true});
     }
 
-    sendToDelete(arr: ExpressionDTO[]): Observable<any> {
+    sendToDelete(arr: ExpressionDTO[]): Observable<ExpressionDTO[]> {
         return this.http.post<ExpressionDTO[]>(`${environment.hostUrl}/admin/delete`, arr, {withCredentials: true} );
     }
 }

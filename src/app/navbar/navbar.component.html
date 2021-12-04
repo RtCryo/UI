@@ -9,10 +9,10 @@
                             <a class="nav-link" aria-current="page" routerLink="/calc">Calculator</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" routerLink= "/admin">Admin</a>
+                            <a class="nav-link" aria-current="page" *ngIf="isAdmin()" routerLink= "/admin">Admin</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" routerLink = "/users">User list</a>
+                            <a class="nav-link" aria-current="page" *ngIf="isDeveloper()" routerLink = "/users">User list</a>
                         </li>
                     </ul>
                     <div class="navbar-brand">Hello, {{currentUser.username}}</div>

@@ -17,6 +17,7 @@ export class CalcComponent implements OnInit {
   isNextOperation: boolean = false;
   lastButton: string = "";
   longExpression: boolean = false;
+  errorMsg = "";
 
   constructor(private calcService: CalcService) {}
 
@@ -43,7 +44,8 @@ export class CalcComponent implements OnInit {
               this.longExpression = true;
             },
             error: (msg) => { 
-              alert(msg.error) 
+              this.errorMsg = msg;
+              setInterval(() => {this.errorMsg = "";}, 5000); 
               this.submitCancel();
             }
           })
@@ -126,14 +128,16 @@ export class CalcComponent implements OnInit {
               this.longExpression = false;
             },
             error: (msg) => {
-              alert(msg.error)
+              this.errorMsg = msg;
+              setInterval(() => {this.errorMsg = "";}, 5000);
               this.submitCancel();
             }
           })
         }
       },
       error: (msg) => { 
-        alert(msg.error) 
+        this.errorMsg = msg;
+        setInterval(() => {this.errorMsg = "";}, 5000);
         this.submitCancel();  
       }
     })

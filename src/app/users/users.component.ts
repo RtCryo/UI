@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { Role } from '../_models/role';
 import { User } from '../_models/user';
 import { UserService } from '../_services/user.service';
@@ -16,16 +15,13 @@ export class UsersComponent implements OnInit {
   users!: User[];
   userForm!: FormGroup;
   roles = Role;
-  resultMsg = "";
+  resultMsg: String = "";
 
   constructor(private userService: UserService, private formBuilder: FormBuilder) {}
 
   ngOnInit() {
       this.loading = true;
-      this.userService.getAll().subscribe(users => {
-          this.loading = false;
-          this.users = users;
-      });
+      this.getAllUsers();
       this.userForm = this.formBuilder.group ({
         username: ['', [Validators.required, 
           Validators.pattern(
@@ -44,12 +40,13 @@ export class UsersComponent implements OnInit {
     this.loading = true;
     this.userService.postNewUser(this.userForm.value).subscribe({
       next: (msg) => {
-        this.resultMsg = msg;
+        this.resultMsg = msg.message;
+        this.getAllUsers();
         setInterval(() => {this.resultMsg = "";}, 5000);
         this.loading = false;
       },
       error: (msg) => {
-        this.resultMsg = "Error";
+        this.resultMsg = msg;
         setInterval(() => {this.resultMsg = "";}, 5000);
         this.loading = false;
       }
@@ -65,4 +62,10 @@ export class UsersComponent implements OnInit {
     this.userForm.get("role")!.patchValue(this.getRoles()[0]);
   }
 
+  getAllUsers(){
+    this.userService.getAll().subscribe(users => {
+      this.loading = false;
+      this.users = users;
+    });
+  }
 }

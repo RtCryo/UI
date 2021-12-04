@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
 import { User } from '../_models/user';
+import { MessageDTO } from '../_models/messageDTO';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -13,6 +14,6 @@ export class UserService {
     }
 
     postNewUser(user: User) {
-        return this.http.post<string>(`${environment.hostUrl}/users/create`, user, {withCredentials: true});
+        return this.http.post<MessageDTO>(`${environment.hostUrl}/users/create`, user, {withCredentials: true});
     }
 }
