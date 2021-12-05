@@ -1,7 +1,15 @@
-
-<div id = "expressionList" class = "p-3">
-    <label for = "chkBoxSelectAll">
-        <input id = "chkBoxSelectAll" class="chkBoxSelectAll me-1" type="checkbox" value="0">
-    </label>
-    <button class = "buttonDel">DELETE</button>
+<div class="card mt-4">
+    <h4 class="card-header">Expressions:</h4>
+    <div class="card-body">
+        <ul>
+            <label for = "chkBoxSelectAll">
+                <input class="me-1" type="checkbox" (click) = "CheckAllOptions()" class = "masterChkBox" [(ngModel)]="checked">
+            </label>
+            <button class = "ms-1 buttonDel" (click) = "deleteExpressions()">Delete</button>
+            <li *ngFor="let expression of webSocket.expressions">
+                <input type="checkbox" class = "chkBox me-1" (click) = "resetCheckAll()" id = {{expression.id}}>
+                <b>{{expression.date}}:</b> {{expression.expressionList}} {{expression.result}}
+            </li>
+        </ul>
+    </div>
 </div>

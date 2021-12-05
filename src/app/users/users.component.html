@@ -1,4 +1,42 @@
-<div class="p-3">
-    <ul id = "userslist">
-    </ul>
-</div>
+<div class="card mt-4">
+    <h4 class="card-header">Users:</h4>
+    <div class="card-body">
+        <div *ngIf="loading" class="spinner-border spinner-border-sm"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <ul *ngIf="users">
+                        <li *ngFor="let user of users">{{user.username}} - {{user.role}}</li>
+                    </ul>
+                </div>
+                <div class="col">
+                    <form [formGroup]="userForm" novalidate>
+                        <h4>Create new user:</h4>
+                        <div class="mb-3 form-group">
+                          <label for="usernameInput" class="form-label">Username</label>
+                          <input type="username" class="form-control" id="usernameInput" aria-describedby="emailHelp" formControlName="username">
+                          <div class="text-danger text-center"
+                            *ngIf="userForm.controls['username'].invalid && userForm.controls['username'].touched">Username is incorrect!</div>
+                        </div>
+                        <div class="mb-3 form-group">
+                          <label for="passwordInput" class="form-label">Password</label>
+                          <input type="password" class="form-control" id="passwordInput" formControlName="password">
+                          <div class="text-danger text-center"
+                            *ngIf="userForm.controls['password'].invalid && userForm.controls['password'].touched">Password is incorrect!</div>
+                        </div>
+                        <div class="input-group mb-3 form-group">
+                          <label class="input-group-text px-4" for="inputGroupSelect01">Role</label>
+                          <select class="form-select" id="inputGroupSelect01" formControlName="role">
+                            <option *ngFor="let role of getRoles()" [ngValue]="role">{{role}}</option>
+                          </select>
+                        </div>
+                        <div class="d-grid mt-4 form-group" align="center">
+                          <button class="btn btn-primary" type="button" [disabled]="userForm.invalid" (click) = "onSubmit()">Create</button>
+                        </div>
+                        <div class = "text-center mt-4 h4" *ngIf="resultMsg">{{resultMsg}}</div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>

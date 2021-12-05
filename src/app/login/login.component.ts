@@ -1,61 +1,53 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { LoginService} from '../service/login.service'
-import { User } from '../user';
-import { Router } from '@angular/router';
-import {  
-  CookieService  
-} from 'ngx-cookie-service';
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+import { AuthenticationService } from '../_services/authentication.service';
 
-@Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-})
+@Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
+    loginForm!: FormGroup;
+    loading = false;
+    submitted = false;
+    error = '';
 
-  username: string = "";
-  password: string = "";
-  errorMessage = 'Invalid Credentials';
-  successMessage: string | undefined;
-  invalidLogin = false;
-  loginSuccess = false;
-  user: User;
-  @Output() onChanged = new EventEmitter<boolean>()
+    constructor(
+        private formBuilder: FormBuilder,
+        private route: ActivatedRoute,
+        private router: Router,
+        private authenticationService: AuthenticationService
+    ) { 
+        if (this.authenticationService.currentUserValue) { 
+            this.router.navigate(['/']);
+        }
+    }
 
+    ngOnInit() {
+        this.loginForm = this.formBuilder.group({
+            username: ['', Validators.required],
+            password: ['', Validators.required]
+        });
+    }
 
-  constructor(private loginService: LoginService, private router: Router, private cookieService: CookieService) { 
-    this.loginService.getUser().subscribe((data: any) => {
-      console.log(data);
-      this.user = data;
-    }, () => {
-    });
-    this.user = new User(-1, "Anon",[]);
-  }
+    get f() { return this.loginForm.controls; }
 
-  ngOnInit(): void {
-  }
+    onSubmit() {
+        if (this.loginForm.invalid) {
+            return;
+        }
 
-  handleLogin() {
-    this.loginService.login(this.username, this.password).subscribe((data: any) => {
-      console.log(data);
-      this.user = data;
-      this.onChanged.emit(true);
-      //this.registerSuccessfulLogin(this.cookieService.get('JSESSIONID'));
-      this.invalidLogin = false;
-      this.loginSuccess = true;
-      this.successMessage = 'Login Successful';
-      //this.router.navigateByUrl('/calc');
-    }, () => {
-      this.invalidLogin = true;
-      this.loginSuccess = false;
-      this.onChanged.emit(false);
-    })
-  }
-
-  registerSuccessfulLogin(cookie: string) {
-    this.cookieService.set('JSESSIONID', cookie);
-  }
-
-
+        this.loading = true;
+        this.authenticationService.login(this.f['username'].value, this.f['password'].value)
+            .subscribe({
+                next: () => {
+                    const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+                    this.router.navigate([returnUrl]);
+                },
+                error: () => {
+                    this.submitted = true;
+                    this.error = "Invalid Credentials";
+                    this.loading = false;
+                }
+            });
+    }
 }
